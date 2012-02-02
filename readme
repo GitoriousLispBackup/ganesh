@@ -1,0 +1,17 @@
+-*- mode: org -*-
+#+STARTUP: hidestars
+Spaced Repitition ReadMe
+
+This program attempts to reproduce the real-life tool of flash cards. It accepts name-value pairs, stores them in a  data structure, and later retrieves them.
+
+* input and store  name-value pair in datastructure and external file
+** enter-data function
+add key-value pairs to hash  
+** populate function
+   continue to add key-value pairs in *key-value-hash* until user enters "n"
+** save-db/load-db function
+   saves *key-value-hash* table to external file. load-db sets *key-value-hash* values from external files, overwriting any previous values.
+* access name and value pairs
+** In progress show-hash function
+accesses and shows all key-value pairs starting first with the key, then showing both key and value.
+* gui bindings
