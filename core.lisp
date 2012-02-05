@@ -6,9 +6,9 @@
 ;; add key-value pairs to *key-value-hash*
 (defun enter-data ()
   (princ "Enter first value: ")
-  (let ((k (read)))
+  (let ((k (read-line)))
     (princ "Enter second value: ")
-    (let ((v (read)))
+    (let ((v (read-line)))
       (setf (gethash k *key-value-hash*) v))))
 
 ;; continue adding data to *key-value-hash*
@@ -40,3 +40,15 @@
                     (format t "~a = ~a" k v)
                     (fresh-line)))
            *key-value-hash*))
+
+;; calculate interval, based on supermemory-0 algorithm (http://www.supermemo.com/english/ol/beginning.htm#Algorithm)
+(defun interval (val)
+  (cond ((eq val 1)
+         1)
+        ((eq val 2)
+         7)
+        ((eq val 3)
+         16)
+        ((eq val 4)
+         35)
+        (t (* (interval (1- val)) 2))))

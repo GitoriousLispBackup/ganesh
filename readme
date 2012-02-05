@@ -12,6 +12,12 @@ add key-value pairs to hash
 ** save-db/load-db function
    saves *key-value-hash* table to external file. load-db sets *key-value-hash* values from external files, overwriting any previous values.
 * access name and value pairs
+** In progress interval function
+   calculates the repitition intervals
+*** Important! add timestamp to each card for interval calculation
+ - [ ] rewrite cards to use defstruct
+ - [ ] add timestamp and interval parameters
+interval algorithm follows two modes, pass or fail. pass increments interval by one, fail decreases interval by one
 ** In progress show-hash function
 accesses and shows all key-value pairs starting first with the key, then showing both key and value.
 * gui bindings

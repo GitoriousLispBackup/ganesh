@@ -10,3 +10,8 @@
     (setf *key-value-hash* nil)
     (load-db "test.lisp")
     (equal (gethash 'test *key-value-hash*) 'good)))
+
+(defun test-interval ()
+  (eq (interval 5) 70)
+  (eq (interval 6) 140))
+  
