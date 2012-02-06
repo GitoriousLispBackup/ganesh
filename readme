@@ -6,18 +6,27 @@ This program attempts to reproduce the real-life tool of flash cards. It accepts
 
 * input and store  name-value pair in datastructure and external file
 ** enter-data function
-add key-value pairs to hash  
+add key-value pairs, plus interval and date information
+*** Important! replace get-universal-time with day-since-the-epoch function
+
 ** populate function
-   continue to add key-value pairs in *key-value-hash* until user enters "n"
+   continue to add key-value pairs in *main-list* until user enters "n"
+
 ** save-db/load-db function
-   saves *key-value-hash* table to external file. load-db sets *key-value-hash* values from external files, overwriting any previous values.
+   saves *key-value-hash* table to external file. load-db sets *main-list* values from external files, overwriting any previous values.
+
 * access name and value pairs
-** In progress interval function
+** interval function
    calculates the repitition intervals
 *** Important! add timestamp to each card for interval calculation
- - [ ] rewrite cards to use defstruct
- - [ ] add timestamp and interval parameters
+ - [X] rewrite cards to use property lists
+ - [-] add timestamp and interval parameters
 interval algorithm follows two modes, pass or fail. pass increments interval by one, fail decreases interval by one
-** In progress show-hash function
-accesses and shows all key-value pairs starting first with the key, then showing both key and value.
+
+** In progress show-cards function
+accesses and shows today's due cards, then asks for a passing or failing mark. intervals and dates are adjusted accordingly
+
+** In progress sift function
+filters today's cards from cards found in *main-list*
+
 * gui bindings
