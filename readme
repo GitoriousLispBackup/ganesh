@@ -7,7 +7,6 @@ This program attempts to reproduce the real-life tool of flash cards. It accepts
 * input and store  name-value pair in datastructure and external file
 ** enter-data function
 add key-value pairs, plus interval and date information
-*** Important! replace get-universal-time with day-since-the-epoch function
 
 ** populate function
    continue to add key-value pairs in *main-list* until user enters "n"
@@ -18,15 +17,15 @@ add key-value pairs, plus interval and date information
 * access name and value pairs
 ** interval function
    calculates the repitition intervals
-*** Important! add timestamp to each card for interval calculation
- - [X] rewrite cards to use property lists
- - [-] add timestamp and interval parameters
-interval algorithm follows two modes, pass or fail. pass increments interval by one, fail decreases interval by one
 
-** In progress show-cards function
-accesses and shows today's due cards, then asks for a passing or failing mark. intervals and dates are adjusted accordingly
+** show-cards function
+   accesses and shows today's due cards, then asks for a passing or failing mark. interval algorithm follows two modes, pass or fail. pass increments interval by one, fail decreases interval by one.
+*** adjust-date function
+    takes interval information and adjusts card's interval.
 
-** In progress sift function
-filters today's cards from cards found in *main-list*
+** date-compare
+   populates *today-list* with due cards from *main-list*
+
+* custom REPL for user flow
 
 * gui bindings

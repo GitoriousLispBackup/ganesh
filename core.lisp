@@ -38,22 +38,28 @@
     (with-standard-io-syntax
       (setf *main-list* (read in)))))
 
-;; show key-value pairs in main list
+;; returns interval of card
 (defun card-interval (card)
   (getf card :interval))
 
+;; returns universal-time of card
 (defun card-day (card)
   (getf card :day))
 
+;; show key-value pairs in main list
 (defun show-cards ()
   (mapc (lambda (c)
           (progn (format t "~a = ? " (getf c :k))
                  (read)
                  (format t "~a = ~a" (getf c :k) (getf c :v))
+                 (fresh-line)
                  (princ "(p)ass or (f)ail?")
                  (case (read)
                    (p (setf (getf c :interval) (1+ (card-interval c))))
-                   (f (setf (getf c :interval) (1- (card-interval c)))))
+                   (f (setf (getf c :interval)
+                            (if (<= (card-interval c) 0)
+                                0
+                                (1- (card-interval c))))))
                  (adjust-date c)
                  (fresh-line)))
         *today-list*))
@@ -72,16 +78,36 @@
          35)
         (t (* (interval (1- val)) 2))))
 
+;; seconds in a day
+(defun secs->day ()
+  (* (* (* 60) 60) 24))
+
+;; calculates new interval in seconds of a day
+(defun time-calc (c)
+  (* (secs->day)
+     (interval (card-interval c))))
+
 ;; adjust card due dates
 (defun adjust-date (c)
   (setf (getf c :day) (+ (card-day c)
-                         (interval (card-interval c)))))
+                         (time-calc c))))
 
 ;; populate *today-list* with due cards
-(sift ()
-      (setf *today-list* (remove-if-not (lambda (date)
-                                          ;; date = today's date
-                                          )
-                                        *main-list*)))
+(defun date-compare ()
+  (setf *today-list* (remove-if-not (lambda (c)
+                                      (let ((date (card-day c)))
+                                        (>= (get-universal-time)
+                                            date)))
+                                    *main-list*)))
 
-                                                  
+;; main loop
+(defun main-loop()
+  (loop initially
+       (progn
+         (date-compare)
+         (show-cards))
+       while (y-or-n-p "Again?")
+       do (progn
+            (date-compare)
+            (show-cards))))
+       
