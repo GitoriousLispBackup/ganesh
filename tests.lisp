@@ -2,16 +2,41 @@
 
 (load "core.lisp")
 
-;; database test
+;; test template
+;; function expected-value -> pass or fail
+(defun run-test (fn val)
+  (let ((func-val (funcall fn)))
+  (if (equal func-val val)
+      (format t "~a test passed. ~%" fn)
+      (format t "~a test failed, value is ~a ~%" fn func-val))))
+
+;; enter-data function test
+(defun test-input ()
+  (push (enter-data 'doko 'where 0 (get-universal-time)) *main-list*)
+  (getf (car *main-list*) :k))
+
+(run-test #'test-input 'doko)
+                        
+;; save-db and load-db function test
 (defun test-db ()
   (progn
-    (setf (gethash 'test *key-value-hash*) 'good)
+    (push (enter-data 'doko 'where 0 (get-universal-time)) *main-list*)
     (save-db "test.lisp")
-    (setf *key-value-hash* nil)
+    (setf *main-list* nil)
     (load-db "test.lisp")
-    (equal (gethash 'test *key-value-hash*) 'good)))
+    (getf (car *main-list*) :v)))
 
-(defun test-interval ()
-  (eq (interval 5) 70)
-  (eq (interval 6) 140))
-  
+(run-test #'test-db 'where)
+
+;; card-interval function test
+(run-test #'(lambda ()
+              (card-interval (enter-data 'doko 'where 1 (get-universal-time))))
+          1)
+
+;; secs->day function test
+(run-test #'secs->day 86400)
+
+;; interval function test
+(run-test #'(lambda ()
+              (interval 5))
+          70)

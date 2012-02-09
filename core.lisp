@@ -80,7 +80,7 @@
 
 ;; seconds in a day
 (defun secs->day ()
-  (* (* (* 60) 60) 24))
+  (* (* 60 60) 24))
 
 ;; calculates new interval in seconds of a day
 (defun time-calc (c)
