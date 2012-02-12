@@ -6,24 +6,31 @@ This program attempts to reproduce the real-life tool of flash cards. It accepts
 
 * input and store  name-value pair in datastructure and external file
 ** enter-data function
-add key-value pairs, plus interval and date information
+   add key-value pair, interval (default interval is 0), and date information. date format is seconds since the epoch.
 
 ** populate function
-   continue to add key-value pairs in *main-list* until user enters "n"
+   add multiple key-value pairs in *main-list*.
 
 ** save-db/load-db function
-   saves *key-value-hash* table to external file. load-db sets *main-list* values from external files, overwriting any previous values.
+   writes value of *main-list* to external file. load-db sets *main-list* values from external files, overwriting any previous values.
 
 * access name and value pairs
 ** interval function
-   calculates the repitition intervals
+   calculates the repetition intervals. intervals are based on the formula
+   $$ \textit{ where } I(1) = 1 $$ 
+   $$ I(2) = 7 $$ 
+   $$ I(3) = 16 $$ 
+   $$ I(4) = 35 $$
+   $$ \textit{for {i>4}}, I(i) = I({i-1})\times{2} $$
 
 ** show-cards function
    accesses and shows today's due cards, then asks for a passing or failing mark. interval algorithm follows two modes, pass or fail. pass increments interval by one, fail decreases interval by one.
+*** adjust-interval function
+    adjusts card interval based on interval information and pass or fail mark
 *** adjust-date function
     takes interval information and adjusts card's interval.
 
-** date-compare
+** date-compare function
    populates *today-list* with due cards from *main-list*
 
 * custom REPL for user flow

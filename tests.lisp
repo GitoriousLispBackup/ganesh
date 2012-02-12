@@ -33,6 +33,12 @@
               (card-interval (enter-data 'doko 'where 1 (get-universal-time))))
           1)
 
+;; adjust-interval function test
+(run-test #'(lambda ()
+              (adjust-interval (enter-data 'doko 'where 0 0)
+                               'p))
+          (eq (getf (car *main-list*) :k) 1))
+
 ;; secs->day function test
 (run-test #'secs->day 86400)
 

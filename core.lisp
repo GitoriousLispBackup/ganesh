@@ -48,21 +48,19 @@
 
 ;; show key-value pairs in main list
 (defun show-cards ()
-  (mapc (lambda (c)
-          (progn (format t "~a = ? " (getf c :k))
-                 (read)
-                 (format t "~a = ~a" (getf c :k) (getf c :v))
-                 (fresh-line)
-                 (princ "(p)ass or (f)ail?")
-                 (case (read)
-                   (p (setf (getf c :interval) (1+ (card-interval c))))
-                   (f (setf (getf c :interval)
-                            (if (<= (card-interval c) 0)
-                                0
-                                (1- (card-interval c))))))
-                 (adjust-date c)
-                 (fresh-line)))
-        *today-list*))
+  (if *today-list*
+      (mapc (lambda (c)
+              (progn (format t "~a " (getf c :k))
+                     (read)
+                     (format t "~a " (getf c :v))
+                     (fresh-line)
+                     (princ "(p)ass or (f)ail?")
+                     (let ((x (read)))
+                       (adjust-interval x c))
+                     (adjust-date c)
+                     (fresh-line)))
+            *today-list*)
+      (princ "No due cards.")))
 
 ;; calculate interval, based on supermemory-0 algorithm (http://www.supermemo.com/english/ol/beginning.htm#Algorithm)
 (defun interval (val)
@@ -77,6 +75,16 @@
         ((eq val 4)
          35)
         (t (* (interval (1- val)) 2))))
+
+(defun adjust-interval (mark card)
+  (case mark
+    (p (setf (getf card :interval) (1+ (card-interval card))))
+    (f (setf (getf card :interval)
+             (if (<= (card-interval card) 0)
+                 0
+                 (1- (card-interval card)))))
+    (otherwise (princ "Please enter 'p' or 'f': ")
+               (adjust-interval (read) card))))
 
 ;; seconds in a day
 (defun secs->day ()
