@@ -38,6 +38,19 @@
     (with-standard-io-syntax
       (setf *main-list* (read in)))))
 
+;; wrapper function for load-db
+(defun which-db ()
+  (let ((num 0)
+        (files (loop for f in (directory (pathname "db/*.db"))
+                    collect f)))
+    (loop for f in files
+       do (format t "~d. ~a ~%" num (pathname-name f))
+         (incf num))
+    (princ "Open file: ")
+    (let ((x (read)))
+      (load-db (nth x files)))))
+
+  
 ;; returns interval of card
 (defun card-interval (card)
   (getf card :interval))
@@ -110,6 +123,7 @@
 
 ;; main loop
 (defun main-loop()
+  (which-db)
   (loop initially
        (progn
          (date-compare)

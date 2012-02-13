@@ -1,0 +1,9 @@
+1. added adjust-interval function.
+2. show-cards refactored
+* todo
+- [ ] add 'inverse' feature to show-cards function
+- [ ] gui bindings -> toot webserver
+- [ ] custom REPL for user interaction
+- [ ] edit cards feature
+- [ ] wrapper function for load-db
+- [ ] save db automatically
