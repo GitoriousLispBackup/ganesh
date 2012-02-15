@@ -1,5 +1,6 @@
 ;; core functions for spaced repitition program
 
+;;;; input and storage
 ;; main storage for key-value pairs
 (defparameter *main-list* nil)
 
@@ -50,7 +51,7 @@
     (let ((x (read)))
       (load-db (nth x files)))))
 
-  
+;;;; data access
 ;; returns interval of card
 (defun card-interval (card)
   (getf card :interval))
@@ -75,30 +76,6 @@
             *today-list*)
       (princ "No due cards.")))
 
-;; calculate interval, based on supermemory-0 algorithm (http://www.supermemo.com/english/ol/beginning.htm#Algorithm)
-(defun interval (val)
-  (cond ((eq val 0)
-         0)
-        ((eq val 1)
-         1)
-        ((eq val 2)
-         7)
-        ((eq val 3)
-         16)
-        ((eq val 4)
-         35)
-        (t (* (interval (1- val)) 2))))
-
-(defun adjust-interval (mark card)
-  (case mark
-    (p (setf (getf card :interval) (1+ (card-interval card))))
-    (f (setf (getf card :interval)
-             (if (<= (card-interval card) 0)
-                 0
-                 (1- (card-interval card)))))
-    (otherwise (princ "Please enter 'p' or 'f': ")
-               (adjust-interval (read) card))))
-
 ;; seconds in a day
 (defun secs->day ()
   (* (* 60 60) 24))
@@ -121,9 +98,72 @@
                                             date)))
                                     *main-list*)))
 
+;; invert the cards' keys and values
+(defun card-invert ()
+  (mapc (lambda (c)
+          (psetf (getf c :k) (getf c :v)
+                 (getf c :v) (getf c :k)))
+        *main-list*))
+
+;;;; algorithm
+;; calculate interval, based on supermemory-0 algorithm (http://www.supermemo.com/english/ol/beginning.htm#Algorithm)
+(defun interval (val)
+  (cond ((eq val 0)
+         0)
+        ((eq val 1)
+         1)
+        ((eq val 2)
+         7)
+        ((eq val 3)
+         16)
+        ((eq val 4)
+         35)
+        (t (* (interval (1- val)) 2))))
+
+;; adjusts individual card interval based on the pass or fail answer
+(defun adjust-interval (mark card)
+  (case mark
+    (p (setf (getf card :interval) (1+ (card-interval card))))
+    (f (setf (getf card :interval)
+             (if (<= (card-interval card) 0)
+                 0
+                 (1- (card-interval card)))))
+    (otherwise (princ "Please enter 'p' or 'f': ")
+               (adjust-interval (read) card))))
+
+;;;; custom repl
+(defparameter *allowed-commands* '(quit study add edit))
+
+(defun custom-eval (sexp)
+  (if (member (car sexp) *allowed-commands*)
+      (eval sexp)
+      (format t "Unknown command ~%")))
+
+(defun custom-read ()
+  (let ((cmd (read-from-string
+              (concatenate 'string "(" (read-line) ")"))))
+    cmd))
+
+(defun custom-loop ()
+  (let ((cmd (custom-read)))
+    (unless (eq (car cmd) 'quit)
+      (custom-eval cmd)
+      (custom-loop))))
+
+;; wrapper function
+(defun study ()
+  (main-loop))
+
+;; wrapper function
+(defun add ()
+  (populate))
+
 ;; main loop
 (defun main-loop()
   (which-db)
+  (format t "Invert the cards?")
+  (if (y-or-n-p)
+      (card-invert))
   (loop initially
        (progn
          (date-compare)

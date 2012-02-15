@@ -1,9 +1,17 @@
-1. added adjust-interval function.
-2. show-cards refactored
+1. card-invert function added
+2. custom REPL 
+   1. custom-eval function added
+   2. custom-loop function added
+   3. custom-read function added
+   4. wrapper functions
+      - [X] study function
+      - [X] add function
+      - [ ] edit
+
+
 * todo
-- [ ] add 'inverse' feature to show-cards function
+- [X] add 'inverse' feature to show-cards function
 - [ ] gui bindings -> toot webserver
-- [ ] custom REPL for user interaction
+- [-] custom REPL for user interaction
 - [ ] edit cards feature
-- [ ] wrapper function for load-db
 - [ ] save db automatically

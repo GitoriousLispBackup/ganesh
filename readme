@@ -25,6 +25,8 @@ This program attempts to reproduce the real-life tool of flash cards. It accepts
    populates *today-list* with due cards from *main-list*
 ** which-db functon
    lists available databases and loads the selected one.
+** card-invert fuction
+   inverts keys and values for all cards.
 * algorithm
 ** interval function
    calculates the repetition intervals. intervals are based on the formula
@@ -35,5 +37,10 @@ This program attempts to reproduce the real-life tool of flash cards. It accepts
    $$ \textit{for {i>4}}, I(i) = I({i-1})\times{2} $$
 
 * custom REPL for user flow
-
+** custom-read function
+   adds parenthesis to commands to create valid s-expressions.
+** custom-eval function
+   evalulates the s-expression if it falls within allowed commands
+** custom-loop function
+   loop for custom-eval and custom-read
 * gui bindings

@@ -35,9 +35,12 @@
 
 ;; adjust-interval function test
 (run-test #'(lambda ()
-              (adjust-interval (enter-data 'doko 'where 0 0)
-                               'p))
-          (eq (getf (car *main-list*) :k) 1))
+              (progn
+                (let ((*main-list* (enter-data 'doko 'where 0 0))) 
+                  (adjust-interval (car *main-list*)
+                                 "p")
+                  (getf (car *main-list*) :interval))))
+          1)
 
 ;; secs->day function test
 (run-test #'secs->day 86400)
@@ -46,3 +49,9 @@
 (run-test #'(lambda ()
               (interval 5))
           70)
+
+;; card-invert function test
+(run-test #'(lambda ()
+              (progn (card-invert)
+                     (getf (car *main-list*) :k)))
+          'where)
