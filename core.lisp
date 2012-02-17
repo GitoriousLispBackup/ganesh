@@ -7,6 +7,9 @@
 ;; container for today's cards
 (defparameter *today-list* nil)
 
+;; loaded database file
+(defparameter *db* nil)
+
 ;; add key-value pairs to *main-list*
 (defun enter-data (k v interval day)
   (list :k k :v v :interval interval :day day))
@@ -49,6 +52,7 @@
          (incf num))
     (princ "Open file: ")
     (let ((x (read)))
+      (setf *db* (nth x files))
       (load-db (nth x files)))))
 
 ;;;; data access
@@ -132,7 +136,7 @@
                (adjust-interval (read) card))))
 
 ;;;; custom repl
-(defparameter *allowed-commands* '(quit study add edit))
+(defparameter *allowed-commands* '(study add edit quit))
 
 (defun custom-eval (sexp)
   (if (member (car sexp) *allowed-commands*)
@@ -152,14 +156,17 @@
 
 ;; wrapper function
 (defun study ()
-  (main-loop))
+  (main-loop)
+  (save-db *db*))
 
 ;; wrapper function
 (defun add ()
-  (populate))
+  (populate)
+  (save-db *db*))
 
 ;; main loop
 (defun main-loop()
+  (format t "The commands are: ~{ ~<~a~> ~}" *allowed-commands*)
   (which-db)
   (format t "Invert the cards?")
   (if (y-or-n-p)

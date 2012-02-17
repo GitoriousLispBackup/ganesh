@@ -1,17 +1,12 @@
-1. card-invert function added
-2. custom REPL 
-   1. custom-eval function added
-   2. custom-loop function added
-   3. custom-read function added
-   4. wrapper functions
-      - [X] study function
-      - [X] add function
+-*- mode: org -*-
+1. custom REPL
+   1. wrapper functions
       - [ ] edit
+2. automatic saving of db upon addition and studying of cards
 
 
 * todo
-- [X] add 'inverse' feature to show-cards function
 - [ ] gui bindings -> toot webserver
 - [-] custom REPL for user interaction
 - [ ] edit cards feature
-- [ ] save db automatically
+- [X] save db automatically
