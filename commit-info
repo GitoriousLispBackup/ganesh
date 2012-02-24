@@ -1,12 +1,13 @@
 -*- mode: org -*-
 1. custom REPL
    1. wrapper functions
-      - [ ] edit
-2. automatic saving of db upon addition and studying of cards
+      - [-] edit
+2. new-db command in REPL
+3. tests updated
 
 
 * todo
 - [ ] gui bindings -> toot webserver
 - [-] custom REPL for user interaction
-- [ ] edit cards feature
-- [X] save db automatically
+- [-] edit cards feature
+

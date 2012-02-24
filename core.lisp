@@ -109,6 +109,11 @@
                  (getf c :v) (getf c :k)))
         *main-list*))
 
+;; edits selected card, selection done either through search or selected from a list of all cards
+(defun edit-card (c k v)
+  (setf (getf c :k) k)
+  (setf (getf c :v) v))
+
 ;;;; algorithm
 ;; calculate interval, based on supermemory-0 algorithm (http://www.supermemo.com/english/ol/beginning.htm#Algorithm)
 (defun interval (val)
@@ -136,7 +141,7 @@
                (adjust-interval (read) card))))
 
 ;;;; custom repl
-(defparameter *allowed-commands* '(study add edit quit))
+(defparameter *allowed-commands* '(new-db study add edit quit))
 
 (defun custom-eval (sexp)
   (if (member (car sexp) *allowed-commands*)
@@ -149,11 +154,19 @@
     cmd))
 
 (defun custom-loop ()
+  (format t "The commands are: ~{ ~<~a~> ~} ~%" *allowed-commands*)
   (let ((cmd (custom-read)))
     (unless (eq (car cmd) 'quit)
       (custom-eval cmd)
       (custom-loop))))
 
+;; wrapper function
+(defun new-db ()
+  (setf *main-list* nil)
+  (populate)
+  (princ "Enter filename:")
+  (save-db (pathname (concatenate 'string "db/" (read-line) ".db"))))
+   
 ;; wrapper function
 (defun study ()
   (main-loop)
@@ -161,12 +174,27 @@
 
 ;; wrapper function
 (defun add ()
+  (which-db)
   (populate)
   (save-db *db*))
 
+(defun edit ()
+  (let ((i 0))
+    (loop for c in *main-list*
+         do (format t "~d. ~a = ~a ~%" i (getf c :k) (getf c :v))
+         (incf i)))
+  (princ "Choose a card:")
+  (let ((i (read)))
+    (princ "Enter first value:")
+    (let ((k (read-line)))
+      (princ "Enter second value:")
+      (let ((v (read-line)))
+        (edit-card (nth i *main-list*)
+                   k v)))))
+
+
 ;; main loop
 (defun main-loop()
-  (format t "The commands are: ~{ ~<~a~> ~}" *allowed-commands*)
   (which-db)
   (format t "Invert the cards?")
   (if (y-or-n-p)
@@ -177,6 +205,7 @@
          (show-cards))
        while (y-or-n-p "Again?")
        do (progn
+            (setf *today-list* nil)
             (date-compare)
             (show-cards))))
        

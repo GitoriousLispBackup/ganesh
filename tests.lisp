@@ -37,8 +37,7 @@
 (run-test #'(lambda ()
               (progn
                 (let ((*main-list* (enter-data 'doko 'where 0 0))) 
-                  (adjust-interval (car *main-list*)
-                                 "p")
+                  (adjust-interval 'p (car *main-list*))
                   (getf (car *main-list*) :interval))))
           1)
 
@@ -55,3 +54,9 @@
               (progn (card-invert)
                      (getf (car *main-list*) :k)))
           'where)
+
+(run-test #'(lambda ()
+              (progn
+                (edit-card (car *main-list*) 'doko 'where)
+                (getf (car *main-list*) :k)))
+          'doko)
