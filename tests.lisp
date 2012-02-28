@@ -60,3 +60,9 @@
                 (edit-card (car *main-list*) 'doko 'where)
                 (getf (car *main-list*) :k)))
           'doko)
+
+;; shuffle cards
+(not (eq (shuffle-cards '(1 2 3 4 5))
+         '(1 2 3 4 5)))
+(not (eq (shuffle-cards '(1 2 3 4 5))
+         '(5 4 3 2 1)))

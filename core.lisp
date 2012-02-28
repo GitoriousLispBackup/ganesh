@@ -64,6 +64,19 @@
 (defun card-day (card)
   (getf card :day))
 
+;; shuffle cards
+(defun shuffle-cards (cards)
+  (let ((new-lst nil))
+    (labels ((shuffle (lst)
+               (when lst
+                 (push (nth (random (length lst))
+                            lst)
+                       new-lst)
+                 (shuffle (concatenate 'list (subseq lst 0 (position (car new-lst) lst))
+                                       (subseq lst (1+ (position (car new-lst) lst))))))))
+      (shuffle cards))
+    new-lst))
+  
 ;; show key-value pairs in main list
 (defun show-cards ()
   (if *today-list*
@@ -77,7 +90,7 @@
                        (adjust-interval x c))
                      (adjust-date c)
                      (fresh-line)))
-            *today-list*)
+            (shuffle-cards *today-list*))
       (princ "No due cards.")))
 
 ;; seconds in a day

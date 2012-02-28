@@ -1,12 +1,9 @@
 -*- mode: org -*-
-1. custom REPL
-   1. wrapper functions
-      - [-] edit
-2. new-db command in REPL
-3. tests updated
+* Shuffle function added
+* Tests updated
+** Priority rewrite shuffle card tests
 
-
-* todo
+* TODO
 - [ ] gui bindings -> toot webserver
 - [-] custom REPL for user interaction
 - [-] edit cards feature
