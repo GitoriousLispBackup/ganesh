@@ -51,6 +51,7 @@
        do (format t "~d. ~a ~%" num (pathname-name f))
          (incf num))
     (princ "Open file: ")
+    (finish-output nil)
     (let ((x (read)))
       (setf *db* (nth x files))
       (load-db (nth x files)))))
