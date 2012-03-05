@@ -1,5 +1,10 @@
 ;; core functions for spaced repitition program
 
+;; finish-output and read wrapper function
+(defun user-input ()
+  (finish-output nil)
+  (read))
+
 ;;;; input and storage
 ;; main storage for key-value pairs
 (defparameter *main-list* nil)
@@ -16,9 +21,9 @@
 
 (defun prompt-for-data ()
   (princ "Enter first value: ")
-  (let ((k (read-line)))
+  (let ((k (user-input)))
     (princ "Enter second value: ")
-    (let ((v (read-line)))
+    (let ((v (user-input)))
       (push (enter-data k v 0 (get-universal-time)) *main-list*))))
 
 ;; continue adding data to *main-list*
@@ -51,8 +56,7 @@
        do (format t "~d. ~a ~%" num (pathname-name f))
          (incf num))
     (princ "Open file: ")
-    (finish-output nil)
-    (let ((x (read)))
+    (let ((x (user-input)))
       (setf *db* (nth x files))
       (load-db (nth x files)))))
 
@@ -83,11 +87,11 @@
   (if *today-list*
       (mapc (lambda (c)
               (progn (format t "~a " (getf c :k))
-                     (read)
+                     (user-input)
                      (format t "~a " (getf c :v))
                      (fresh-line)
                      (princ "(p)ass or (f)ail?")
-                     (let ((x (read)))
+                     (let ((x (user-input)))
                        (adjust-interval x c))
                      (adjust-date c)
                      (fresh-line)))
@@ -179,7 +183,7 @@
   (setf *main-list* nil)
   (populate)
   (princ "Enter filename:")
-  (save-db (pathname (concatenate 'string "db/" (read-line) ".db"))))
+  (save-db (pathname (concatenate 'string "db/" (user-input) ".db"))))
    
 ;; wrapper function
 (defun study ()
@@ -198,11 +202,11 @@
          do (format t "~d. ~a = ~a ~%" i (getf c :k) (getf c :v))
          (incf i)))
   (princ "Choose a card:")
-  (let ((i (read)))
+  (let ((i (user-input)))
     (princ "Enter first value:")
-    (let ((k (read-line)))
+    (let ((k (user-input)))
       (princ "Enter second value:")
-      (let ((v (read-line)))
+      (let ((v (user-input)))
         (edit-card (nth i *main-list*)
                    k v)))))
 
@@ -211,6 +215,7 @@
 (defun main-loop()
   (which-db)
   (format t "Invert the cards?")
+  (finish-output nil)
   (if (y-or-n-p)
       (card-invert))
   (loop initially
