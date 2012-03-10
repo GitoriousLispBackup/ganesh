@@ -1,10 +1,5 @@
 ;; core functions for spaced repitition program
 
-;; finish-output and read wrapper function
-(defun user-input ()
-  (finish-output nil)
-  (read))
-
 ;;;; input and storage
 ;; main storage for key-value pairs
 (defparameter *main-list* nil)
@@ -15,15 +10,27 @@
 ;; loaded database file
 (defparameter *db* nil)
 
+;; used for inputting strings
+(defun string-input ()
+  (finish-output nil)
+  (clear-input)
+  (read-line))
+
+;; used for selection input (integer based list, etc)
+(defun select-input ()
+  (finish-output nil)
+  (read))
+
 ;; add key-value pairs to *main-list*
 (defun enter-data (k v interval day)
   (list :k k :v v :interval interval :day day))
 
 (defun prompt-for-data ()
+  (fresh-line)
   (princ "Enter first value: ")
-  (let ((k (user-input)))
+  (let ((k (string-input)))
     (princ "Enter second value: ")
-    (let ((v (user-input)))
+    (let ((v (string-input)))
       (push (enter-data k v 0 (get-universal-time)) *main-list*))))
 
 ;; continue adding data to *main-list*
@@ -56,7 +63,7 @@
        do (format t "~d. ~a ~%" num (pathname-name f))
          (incf num))
     (princ "Open file: ")
-    (let ((x (user-input)))
+    (let ((x (select-input)))
       (setf *db* (nth x files))
       (load-db (nth x files)))))
 
@@ -84,14 +91,15 @@
   
 ;; show key-value pairs in main list
 (defun show-cards ()
+  (finish-output nil)
   (if *today-list*
       (mapc (lambda (c)
               (progn (format t "~a " (getf c :k))
-                     (user-input)
+                     (string-input)
                      (format t "~a " (getf c :v))
                      (fresh-line)
                      (princ "(p)ass or (f)ail?")
-                     (let ((x (user-input)))
+                     (let ((x (select-input)))
                        (adjust-interval x c))
                      (adjust-date c)
                      (fresh-line)))
@@ -156,7 +164,7 @@
                  0
                  (1- (card-interval card)))))
     (otherwise (princ "Please enter 'p' or 'f': ")
-               (adjust-interval (read) card))))
+               (adjust-interval (select-input) card))))
 
 ;;;; custom repl
 (defparameter *allowed-commands* '(new-db study add edit quit))
@@ -183,7 +191,7 @@
   (setf *main-list* nil)
   (populate)
   (princ "Enter filename:")
-  (save-db (pathname (concatenate 'string "db/" (user-input) ".db"))))
+  (save-db (pathname (concatenate 'string "db/" (string-input) ".db"))))
    
 ;; wrapper function
 (defun study ()
@@ -202,13 +210,14 @@
          do (format t "~d. ~a = ~a ~%" i (getf c :k) (getf c :v))
          (incf i)))
   (princ "Choose a card:")
-  (let ((i (user-input)))
+  (let ((i (select-input)))
     (princ "Enter first value:")
-    (let ((k (user-input)))
+    (let ((k (string-input)))
       (princ "Enter second value:")
-      (let ((v (user-input)))
+      (let ((v (string-input)))
         (edit-card (nth i *main-list*)
-                   k v)))))
+                   k v))))
+  (save-db *db*))
 
 
 ;; main loop

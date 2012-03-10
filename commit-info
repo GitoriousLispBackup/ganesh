@@ -1,8 +1,7 @@
 -*- mode: org -*-
 * Priority rewrite shuffle card tests
-* added finish-output to which-db
-** Priority must add finish-output to all princ, format statements
-
+* formatting fixes for output
+* added save-db to edit function
 * TODO
 - [ ] gui bindings -> toot webserver
 - [-] custom REPL for user interaction
